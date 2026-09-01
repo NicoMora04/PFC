@@ -474,6 +474,29 @@
     .segment button.active { color: var(--primary-dark); background: white; box-shadow: 0 3px 10px rgba(31,41,55,.08); }
     .profile-variant.hidden { display: none; }
 
+    .modal {
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: flex-end;
+      padding: 18px;
+      background: rgba(16, 32, 28, .46);
+    }
+
+    .modal.open { display: flex; }
+    .sheet {
+      width: 100%;
+      padding: 20px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 18px 38px rgba(22, 76, 64, .22);
+    }
+    .sheet h3 { margin: 0 0 7px; color: var(--primary-dark); }
+    .sheet p { margin: 0 0 16px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .demo-role-list { display: grid; gap: 9px; }
+    .demo-role-list .btn { margin: 0; }
+
     .home-indicator {
       position: absolute;
       z-index: 25;
@@ -567,10 +590,22 @@
               </div>
             </div>
             <div class="right"><button class="text-link" data-go="A02">¿Olvidaste tu contraseña?</button></div>
-            <button class="btn btn-primary">Iniciar sesión</button>
+            <button class="btn btn-primary" data-open-login>Iniciar sesión</button>
             <div class="divider">o</div>
             <button class="btn btn-secondary" data-go="A04">Crear una cuenta</button>
             <p class="center mt-24" style="font-size:11px;color:var(--muted)">Al continuar, aceptás el uso responsable de tus datos según la finalidad de la aplicación.</p>
+          </div>
+        </div>
+        <div class="modal" id="loginRoleModal" aria-hidden="true">
+          <div class="sheet">
+            <h3>Acceso de demostración</h3>
+            <p>El backend valida las credenciales y dirige a la interfaz correspondiente al rol almacenado en la cuenta.</p>
+            <div class="demo-role-list">
+              <button class="btn btn-primary" data-href="Mockups_Voluntario_Actividad_1_1_6.html#V01">Ingresar como VOLUNTARIO</button>
+              <button class="btn btn-secondary" data-href="Mockups_Organizacion_Actividad_1_1_6.html#O01">Ingresar como ORGANIZACION</button>
+              <button class="btn btn-secondary" data-href="Mockups_Administrador_Actividad_1_1_6.html#AD01">Ingresar como ADMIN</button>
+              <button class="btn btn-ghost" data-close-login>Cancelar</button>
+            </div>
           </div>
         </div>
         <div class="home-indicator"></div>
@@ -663,6 +698,7 @@
               </button>
             </div>
             <div class="notice mt-24"><span>ⓘ</span><div>El tipo de cuenta define las funciones y permisos disponibles dentro de la aplicación.</div></div>
+            <div class="notice warning"><span>🔒</span><div>Las cuentas de administrador no se crean desde el registro público; son provisionadas internamente.</div></div>
             <button class="btn btn-ghost mt-24" data-go="A01">Ya tengo una cuenta</button>
           </div>
         </div>
@@ -689,7 +725,6 @@
             <div class="field"><label>Contraseña</label><div class="input-wrap"><input type="password" value="voluntario2026" data-password><button class="eye" data-toggle-password>◉</button></div></div>
             <div class="field"><label>Confirmar contraseña</label><div class="input-wrap"><input type="password" value="voluntario2026" data-password><button class="eye" data-toggle-password>◉</button></div></div>
             <div class="field"><label>Teléfono <span style="font-weight:400;color:var(--muted)">(opcional)</span></label><input value="342 555 0182"></div>
-            <div class="field"><label>Fecha de nacimiento <span style="font-weight:400;color:var(--muted)">(opcional)</span></label><input type="date" value="2000-05-10"></div>
             <div class="field">
               <label>Intereses</label>
               <div class="chip-wrap">
@@ -699,8 +734,6 @@
                 <button class="chip" type="button">Ambiente</button>
               </div>
             </div>
-            <div class="field"><label>Disponibilidad</label><select><option>Fines de semana</option><option>Días de semana</option><option>Flexible</option></select></div>
-            <div class="field"><label>Radio de preferencia</label><select><option>Hasta 10 km</option><option>Hasta 5 km</option><option>Hasta 20 km</option></select></div>
             <label class="check-row"><input type="checkbox" checked><span>Acepto utilizar mi ubicación aproximada únicamente para encontrar oportunidades y organizaciones cercanas.</span></label>
             <button class="btn btn-primary">Crear cuenta</button>
             <button class="btn btn-ghost" data-go="A01">Ya tengo una cuenta</button>
@@ -746,7 +779,7 @@
           <div class="statusbar"><span>9:41</span><span class="status-icons">● ◔ ▮</span></div>
           <div class="content compact">
             <div class="page-head">
-              <button class="icon-btn" aria-label="Volver">←</button>
+              <button class="icon-btn" data-back-route aria-label="Volver">←</button>
               <div class="copy"><h2>Perfil</h2><p>Información personal e institucional.</p></div>
             </div>
             <div class="segment">
@@ -762,6 +795,7 @@
               <div class="field"><label>Intereses</label><div class="chip-wrap"><button class="chip selected">Asistencia social</button><button class="chip selected">Donaciones</button><button class="chip">Educación</button></div></div>
               <div class="field"><label>Ubicación aproximada</label><input value="Santa Fe · radio 10 km"></div>
               <label class="check-row"><input type="checkbox" checked><span>Uso funcional de geolocalización habilitado.</span></label>
+              <label class="check-row"><input type="checkbox" checked><span>Notificaciones push habilitadas en este dispositivo.</span></label>
               <button class="btn btn-primary">Guardar cambios</button>
               <button class="btn btn-ghost" style="color:var(--danger)">Cerrar sesión</button>
             </section>
@@ -774,6 +808,7 @@
               <div class="field"><label>Descripción</label><textarea>Organización dedicada a coordinar acciones solidarias en la región.</textarea></div>
               <div class="field"><label>Tipos de actividad</label><div class="chip-wrap"><button class="chip selected">Asistencia social</button><button class="chip selected">Donaciones</button></div></div>
               <div class="field"><label>Ubicación</label><input value="Santa Fe, Argentina"></div>
+              <label class="check-row"><input type="checkbox" checked><span>Notificaciones push habilitadas en este dispositivo.</span></label>
               <button class="btn btn-primary">Guardar cambios</button>
               <button class="btn btn-ghost" style="color:var(--danger)">Cerrar sesión</button>
             </section>
@@ -799,6 +834,8 @@
 
     filters.forEach(button => button.addEventListener('click', () => showScreen(button.dataset.filter)));
     document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => showScreen(button.dataset.go)));
+    const requestedScreen = window.location.hash.slice(1);
+    if (requestedScreen && cards.some(card => card.dataset.id === requestedScreen)) showScreen(requestedScreen);
 
     document.querySelectorAll('[data-toggle-password]').forEach(button => {
       button.addEventListener('click', () => {
@@ -812,6 +849,23 @@
 
     document.querySelector('[data-show-confirmation]').addEventListener('click', () => {
       document.getElementById('recoveryNotice').style.display = 'flex';
+    });
+
+    const loginRoleModal = document.getElementById('loginRoleModal');
+    document.querySelector('[data-open-login]').addEventListener('click', () => {
+      loginRoleModal.classList.add('open');
+      loginRoleModal.setAttribute('aria-hidden', 'false');
+    });
+    document.querySelector('[data-close-login]').addEventListener('click', () => {
+      loginRoleModal.classList.remove('open');
+      loginRoleModal.setAttribute('aria-hidden', 'true');
+    });
+    document.querySelectorAll('[data-href]').forEach(button => {
+      button.addEventListener('click', () => { window.location.href = button.dataset.href; });
+    });
+    document.querySelector('[data-back-route]').addEventListener('click', () => {
+      if (document.referrer && document.referrer.includes('Mockups_')) history.back();
+      else showScreen('A01');
     });
 
     document.querySelectorAll('[data-profile]').forEach(button => {
